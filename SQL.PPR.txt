@@ -1,0 +1,345 @@
+
+**Columns of table  [PPR_worldwide].[dbo].[PPRW]:
+
+SELECT [Year]
+      ,[Semester]
+      ,[World region]
+      ,[Country]
+      ,[Administrative Division]
+      ,[Disease]
+      ,[Animal Category]
+      ,[Species]
+      ,[Outbreak_id]
+      ,[New outbreaks]
+      ,[Susceptible]
+      ,[Measuring units]
+      ,[Cases]
+      ,[Killed and disposed of]
+      ,[Slaughtered]
+      ,[Deaths]
+      ,[Vaccinated]
+  FROM [PPR_worldwide].[dbo].[PPRW]
+
+** Columns of table [PPR_worldwide].[dbo].[goat]:
+SELECT [CTR]
+      ,[Country]
+      ,[Year]
+      ,[Census]
+      ,[FAOSTAT]
+  FROM [PPR_worldwide].[dbo].[goat]
+
+** Columns of table [PPR_worldwide].[dbo].[sheep]
+
+SELECT 
+      [CTR]
+      ,[Country]
+      ,[Year]
+      ,[Census]
+      ,[FAOSTAT]
+  FROM [PPR_worldwide].[dbo].[sheep]
+
+--Q1/ Total cases, vaccinated, killed and deaths per country and per year:
+SELECT
+       Year
+     , [Country]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+     ,sum(case when [Deaths]='NA' then 0 else Deaths end) as 'number_of_deaths'
+	 ,sum(case when Vaccinated='NA' then 0 else Vaccinated end) as 'number_of_vaccinated'
+	  ,sum(case when [Killed and disposed of]='NA' then 0 else [Killed and disposed of] end) as 'number_of_killed'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+ group by 
+       Year, [Country]  
+order by Year desc , Country asc
+----Q2/ Total cases, vaccinated, killed and deaths per species and per animal category since 2018:
+SELECT
+   [Species]
+   ,[Animal Category]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+     ,sum(case when [Deaths]='NA' then 0 else Deaths end) as 'number_of_deaths'
+	 ,sum(case when Vaccinated='NA' then 0 else Vaccinated end) as 'number_of_vaccinated'
+	  ,sum(case when [Killed and disposed of]='NA' then 0 else [Killed and disposed of] end) as 'number_of_killed'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2018, 2019, 2020, 2021, 2022, 2023)
+ group by 
+          [Species]
+   ,[Animal Category]
+order by 'number_of_cases' desc 
+
+---Q3/ Who are the countries with cases > 100 and deaths >10 per year during the year 2022:
+SELECT
+      [Country]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+     ,sum(case when [Deaths]='NA' then 0 else Deaths end) as 'number_of_deaths'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year =2022
+ group by 
+       [Country] 
+having sum(case when [Cases] ='NA' then 0 else Cases end) >100 and sum(case when [Deaths]='NA' then 0 else Deaths end)>10
+order by  'number_of_cases' desc , 'number_of_deaths' desc 
+
+--Q4/ Who are the species  with cases > 100 and deaths >10 per year during the year 2022:
+
+SELECT
+     Species
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+     ,sum(case when [Deaths]='NA' then 0 else Deaths end) as 'number_of_deaths'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year =2022
+ group by 
+      Species 
+having sum(case when [Cases] ='NA' then 0 else Cases end) >100 and sum(case when [Deaths]='NA' then 0 else Deaths end)>10
+order by  'number_of_cases' desc , 'number_of_deaths' desc 
+
+--Q5/ Who are the animal categories  with cases > 100 and deaths >10 per year during the year 2022:
+
+   Select
+	  [Animal Category]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+     ,sum(case when [Deaths]='NA' then 0 else Deaths end) as 'number_of_deaths'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year =2022
+ group by 
+      [Animal Category]
+having sum(case when [Cases] ='NA' then 0 else Cases end) >100 and sum(case when [Deaths]='NA' then 0 else Deaths end)>10
+order by  'number_of_cases' desc , 'number_of_deaths' desc 
+
+ --Q6/ The top 10 countries with the highest number of cases  in 2022:
+
+SELECT TOP 10 with ties 
+     [Country]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year =2022
+ group by 
+        [Country]  
+order by   'number_of_cases' desc 
+
+ --Q7/ The top 10 Species with the highest number of cases in 2022:
+
+ SELECT TOP 10 with ties 
+     [Species]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year =2022
+ group by 
+          [Species]
+order by   'number_of_cases' desc 
+ 
+-- Q8/ The top 20 countries with the highest cases in the last 5 years including 2023, presenting the maximum, minimum and the average number of cases per country:
+
+SELECT  TOP 20 with ties 
+     [Country]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+	 , max(case when [Cases] ='NA' then 0 else Cases end) as 'Max_cases'
+	 , min(case when [Cases] ='NA' then 0 else Cases end) as 'Min_cases'
+	 ,avg(case when [Cases] ='NA' then 0 else Cases end) as 'Average_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021,2022, 2023)
+ group by 
+      [Country]  
+order by   'number_of_cases' desc 
+--Q9/. The top 20  species with the highest cases in the last 5 years including 2023, presenting the maximum, minimum and the average number of cases per species
+
+SELECT  TOP 20 with ties 
+     [Species]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+	 , max(case when [Cases] ='NA' then 0 else Cases end) as 'Max_cases'
+	 , min(case when [Cases] ='NA' then 0 else Cases end) as 'Min_cases'
+	 ,avg(case when [Cases] ='NA' then 0 else Cases end) as 'Average_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021,2022, 2023)
+ group by 
+      [Species]
+order by   'number_of_cases' desc 
+
+--Q10/ The number of  cases in the last 5 years including 2023 per world region, presenting the maximum, minimum and the average number of cases per region:
+
+SELECT  
+     [World region]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+	 , max(case when [Cases] ='NA' then 0 else Cases end) as 'Max_cases'
+	 , min(case when [Cases] ='NA' then 0 else Cases end) as 'Min_cases'
+	 ,avg(case when [Cases] ='NA' then 0 else Cases end) as 'Average_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021,2022, 2023)
+ group by 
+    [World region]
+order by   'number_of_cases' desc 
+
+--Q11/. The number of  cases per world region during the period (2005-2023), presenting the maximum, minimum and the average number of cases per region:
+SELECT  
+
+     [World region]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+	 , max(case when [Cases] ='NA' then 0 else Cases end) as 'Max_cases'
+	 , min(case when [Cases] ='NA' then 0 else Cases end) as 'Min_cases'
+	 ,avg(case when [Cases] ='NA' then 0 else Cases end) as 'Average_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+ group by 
+    [World region]
+order by   'number_of_cases' desc
+
+--Q12/.classify the number of  cases per species  during the period (2005-2023),  presenting the maximum, minimum and the average number of cases per species:
+
+SELECT  
+
+     [Species]
+     ,sum(case when [Cases] ='NA' then 0 else Cases end) as 'number_of_cases'
+	 , max(case when [Cases] ='NA' then 0 else Cases end) as 'Max_cases'
+	 , min(case when [Cases] ='NA' then 0 else Cases end) as 'Min_cases'
+	 ,avg(case when [Cases] ='NA' then 0 else Cases end) as 'Average_cases'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+ group by 
+    [Species]
+order by   'number_of_cases' desc
+
+--Q13/. mortality_rate, morbidity_rate and fatality_rate per country in 2022:
+
+select     
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year = 2022 and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+
+  --Q14/ mortality_rate, morbidity_rate and fatality_rate per species during the period(2005-2023):
+
+  select     
+      [Species]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where   Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by  [Species]
+  order by 'morbidity_rate' desc , 'mortality_rate' desc, 'fatality_rate' desc
+
+
+--Q15/ The 10 top countries with the highest:
+--* mortality_rate:
+
+SELECT top 10 with ties 
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year = 2022 and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+  ORDER BY 'mortality_rate' desc
+
+
+--*morbidity_rate :
+
+SELECT top 10 with ties 
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year = 2022 and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+  ORDER BY 'morbidity_rate' desc
+
+--*fatality_rate
+SELECT top 10 with ties 
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year = 2022 and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+  ORDER BY 'fatality_rate' desc
+--Q16/  mortality_rate, morbidity_rate and fatality_rate per country during the last five years:
+
+SELECT      
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021, 2022, 2023)  and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+--Q17/ The 10 top countries with the highest:
+--* mortality_rate:
+
+SELECT top 10 with ties
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021, 2022, 2023)  and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+  order by 'mortality_rate' desc 
+
+--*morbidity_rate 
+
+SELECT top 10 with ties
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021, 2022, 2023)  and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+  order by 'morbidity_rate' desc
+
+--* fatality_rate
+SELECT top 10 with ties
+      [Country]
+      ,(sum ((case when [Cases] ='NA' then 0 else Cases end))/sum((case when [Susceptible] ='NA' then 0 else Susceptible end))) * 100 as 'morbidity_rate'
+      ,(sum((case when [Deaths]= 'NA' then 0 else Deaths end ))/ sum((case when [Susceptible]= 'NA' then 0 else Susceptible end )))* 100  as 'mortality_rate'
+      ,(sum(( case when [Deaths]= 'NA' then 0 else Deaths end ))/sum(( case when [Cases]=  'NA' then 0 else Cases end )))* 100 as  'fatality_rate'
+  FROM [PPR_worldwide].[dbo].[PPRW]
+  where Year in (2019, 2020, 2021, 2022, 2023)  and Susceptible <> 'NA' and Cases <> 'NA' and Susceptible <> 0 and Cases <> 0
+  group by Country
+  order by 'fatality_rate' desc
+
+  --Q18/  The vaccination coverage percentage per country since 2018:
+
+  Select 
+ Coalesce( P. Country,g.Country, s.Country) as 'Country'
+ ,round((sum(case when [Vaccinated]= 'NA' then 0 else Vaccinated end)/sum(coalesce ((g.[FAOSTAT]+s.[FAOSTAT]), (g.[Census]+s.[Census]), s.FAOSTAT, g.FAOSTAT, s.Census, g.Census)))* 100, 2)   vaccination_coverage_percentage
+  from [PPR_worldwide].[dbo].[PPRW]  P full join [PPR_worldwide].[dbo].[goat] g
+  on P.Country= g.Country
+  full join [PPR_worldwide].[dbo].[sheep] s
+  on s.Country= g.Country
+  where P.Year in (2018, 019, 2020, 2021, 2022, 2023)
+  group by  Coalesce(P. Country,g.Country, s.Country)
+  order by vaccination_coverage_percentage desc,  'Country' asc 
+
+    --Q19/. The vaccination coverage percentage per species since 2018:
+
+	  Select 
+  P.Species
+ ,round((sum(case when [Vaccinated]= 'NA' then 0 else Vaccinated end)/sum(coalesce ((g.[FAOSTAT]+s.[FAOSTAT]), (g.[Census]+s.[Census]), s.FAOSTAT, g.FAOSTAT, s.Census, g.Census)))* 100, 2)   vaccination_coverage_percentage
+  from [PPR_worldwide].[dbo].[PPRW]  P full join [PPR_worldwide].[dbo].[goat] g
+  on P.Country= g.Country
+  full join [PPR_worldwide].[dbo].[sheep] s
+  on s.Country= g.Country
+  where P.Year in (2018, 019, 2020, 2021, 2022, 2023)
+  group by P.Species
+  order by vaccination_coverage_percentage desc,  P.Species asc 
+
+      --Q20/.  The vaccination coverage percentage per animal category since 2018
+	  
+	  Select
+	  P.[Animal Category]
+ ,round((sum(case when [Vaccinated]= 'NA' then 0 else Vaccinated end)/sum(coalesce ((g.[FAOSTAT]+s.[FAOSTAT]), (g.[Census]+s.[Census]), s.FAOSTAT, g.FAOSTAT, s.Census, g.Census)))* 100, 2)   vaccination_coverage_percentage
+  from [PPR_worldwide].[dbo].[PPRW]  P full join [PPR_worldwide].[dbo].[goat] g
+  on P.Country= g.Country
+  full join [PPR_worldwide].[dbo].[sheep] s
+  on s.Country= g.Country
+  where P.Year in (2018, 019, 2020, 2021, 2022, 2023)
+  group by P.[Animal Category]
+  order by vaccination_coverage_percentage desc,  P.[Animal Category]asc 
+
+
+
+
+
+
