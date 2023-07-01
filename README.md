@@ -22,8 +22,11 @@ and the disease kills anywhere up to 70 percent of infected animals. The PPR vir
 2) Cleaning: * converting numbers from french to english by converting comma to point 
               * replacing empty cells and - by NA
 2) Exportation to microsofot server sql
+3) 
 ** The table of PPR called [PPR_worldwide].[dbo].[PPRW]
+   
 ** The table of goat number called [PPR_worldwide].[dbo].[goat]
+
 ** The table of sheep number called [PPR_worldwide].[dbo].[sheep]
 
    In the text file names SQL.PPR, I will run some queries to get relevant information aboiut the disease 
