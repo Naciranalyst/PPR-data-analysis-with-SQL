@@ -14,6 +14,7 @@ source: https://wahis.woah.org/#/dashboards/qd-dashboard  excracted in 26/06/202
 affecting domestic and wild small ruminants. It is caused by a virus belonging to the genus Morbillivirus,
  family Paramixoviridae. Once newly introduced, the virus can infect up to 90 percent of an animal heard, 
 and the disease kills anywhere up to 70 percent of infected animals. The PPR virus does not infect humans(FAO, 2023)
+
 ​
 ** Steps of analysing the data
 ​
