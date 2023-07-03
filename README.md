@@ -3,9 +3,9 @@ Insight of Peste des petits ruminants disease worldwide. Distribution, vaccinati
 
 ###### * In this project, two datsets were used:
 1. First dataset: Peste des petits ruminants disease worldwide
-source: https://wahis.woah.org/#/dashboards/qd-dashboard  excracted in 26/06/2023. It contains row 11 785 and 17 columns 
+source: https://wahis.woah.org/#/dashboards/qd-dashboard  excracted in 26/06/2023. It contains  11 785 rows and 17 columns.
 ​
-2. Second dataset: small ruminants number  from https://www.fao.org/livestock-systems/global-distributions/en/ two tables of number of sheep and goats per country 
+2. Second dataset: small ruminants number etracted from https://www.fao.org/livestock-systems/global-distributions/en/ . Two tables of number of sheep and goats per country.
 ​
 **Definition of data: dataset of notified foci, cases and outbreaks of PPR from 2005-2023 worldwide. Exctracted from
  the database WAHIS of the World organisation for Animal Health (OIE).
@@ -13,7 +13,7 @@ source: https://wahis.woah.org/#/dashboards/qd-dashboard  excracted in 26/06/202
 **Peste des Petits Ruminants (PPR), also known as sheep and goat plague, is a highly contagious animal disease 
 affecting domestic and wild small ruminants. It is caused by a virus belonging to the genus Morbillivirus,
  family Paramixoviridae. Once newly introduced, the virus can infect up to 90 percent of an animal heard, 
-and the disease kills anywhere up to 70 percent of infected animals. The PPR virus does not infect humans(FAO, 2023)
+and the disease kills anywhere up to 70 percent of infected animals. The PPR virus does not infect humans(FAO, 2023).
 
 ​
 ** Steps of analysing the data
@@ -29,4 +29,4 @@ and the disease kills anywhere up to 70 percent of infected animals. The PPR vir
 
 ** The table of sheep number called [PPR_worldwide].[dbo].[sheep]
 
-   In the text file names SQL.PPR, I will run some queries to get relevant information aboiut the disease 
+   In the text file named SQL.PPR, I have run some queries to get relevant information aboiut the disease 
