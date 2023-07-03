@@ -5,7 +5,7 @@ Insight of Peste des petits ruminants disease worldwide. Distribution, vaccinati
 1. First dataset: Peste des petits ruminants disease worldwide
 source: https://wahis.woah.org/#/dashboards/qd-dashboard  excracted in 26/06/2023. It contains  11 785 rows and 17 columns.
 ​
-2. Second dataset: small ruminants number etracted from https://www.fao.org/livestock-systems/global-distributions/en/ . Two tables of number of sheep and goats per country.
+2. Second dataset: small ruminants number extracted from https://www.fao.org/livestock-systems/global-distributions/en/ . Two tables of number of sheep and goats per country.
    
  **Definition of data: dataset of notified foci, cases and outbreaks of PPR from 2005-2023 worldwide. Exctracted from
  the database WAHIS of the World organisation for Animal Health (OIE).
